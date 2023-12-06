@@ -37,13 +37,17 @@
             android:layout_marginRight="16dp"
             android:backgroundTint="@color/backgroudColorBtn"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_add"
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundedFAB"
+            />
 
 
         <ProgressBar
             android:id="@+id/progress"
+            style="@style/ProgressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
