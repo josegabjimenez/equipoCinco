@@ -10,6 +10,7 @@ import com.example.equipoCinco.repository.InventoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.google.firebase.auth.FirebaseAuth
 
 @HiltViewModel
 class InventoryViewModel @Inject constructor(
@@ -95,5 +96,37 @@ class InventoryViewModel @Inject constructor(
         val total = price * quantity
         return total.toDouble()
     }
+
+    fun registerUser(email: String, pass: String, isRegister: (Boolean) -> Unit) {
+        inventoryRepository.registerUser(email, pass) { response ->
+            isRegister(response)
+        }
+    }
+
+    fun loginUser(email: String, pass: String, isLogin: (Boolean) -> Unit) {
+
+        if (email.isNotEmpty() && pass.isNotEmpty()) {
+            FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(email, pass)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        isLogin(true)
+                    } else {
+                        isLogin(false)
+                    }
+                }
+        } else {
+            isLogin(false)
+        }
+    }
+
+    fun sesion(email: String?, isEnableView: (Boolean) -> Unit) {
+        if (email != null) {
+            isEnableView(true)
+        } else {
+            isEnableView(false)
+        }
+    }
 }
+
 
