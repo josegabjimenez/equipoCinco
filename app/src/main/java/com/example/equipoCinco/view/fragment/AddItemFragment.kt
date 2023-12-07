@@ -1,6 +1,9 @@
 package com.example.equipoCinco.view.fragment
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,59 +37,72 @@ class AddItemFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         controladores()
-        observerViewModel()
-
-
     }
 
     private fun controladores() {
+        binding.toolbar.toolbarTitle.setText("Agregar producto")
+        binding.toolbar.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
         validarDatos()
         binding.btnSaveInventory.setOnClickListener {
-            saveInvetory()
+            saveInventory()
         }
     }
 
-    private fun saveInvetory(){
+    private fun saveInventory(){
+        val id = binding.etId.text.toString()
         val name = binding.etName.text.toString()
-        val price = binding.etPrice.text.toString().toInt()
-        val quantity = binding.etQuantity.text.toString().toInt()
-        val inventory = Inventory(name = name, price = price, quantity = quantity)
-        inventoryViewModel.saveInventory(inventory)
-        Log.d("test",inventory.toString())
-        Toast.makeText(context,"Artículo guardado !!", Toast.LENGTH_SHORT).show()
-        findNavController().popBackStack()
+        val price = binding.etPrice.text.toString()
+        val quantity = binding.etQuantity.text.toString()
 
+        if (id.isNotEmpty() && name.isNotEmpty() && price.isNotEmpty() && quantity.isNotEmpty()) {
+            val inventory = Inventory(id = id.toInt(), name = name, price = price.toInt(), quantity = quantity.toInt())
+            inventoryViewModel.saveInventory(inventory)
+            Log.d("test",inventory.toString())
+            Toast.makeText(context,"Artículo guardado !!", Toast.LENGTH_SHORT).show()
+            cleanFields()
+            findNavController().popBackStack()
+        } else {
+            Toast.makeText(context, "Llene los campos", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun cleanFields() {
+        binding.etId.setText("")
+        binding.etName.setText("")
+        binding.etPrice.setText("")
+        binding.etQuantity.setText("")
     }
 
     private fun validarDatos() {
-        val listEditText = listOf(binding.etName, binding.etPrice, binding.etQuantity)
+        val listEditText = listOf(binding.etId, binding.etName, binding.etPrice, binding.etQuantity)
+
+        val btn = binding.btnSaveInventory
+        btn.isEnabled = false // Initially, disable the button
+        btn.setTextColor(Color.GRAY)
+
 
         for (editText in listEditText) {
-            editText.addTextChangedListener {
-                val isListFull = listEditText.all{
-                    it.text.isNotEmpty() // si toda la lista no está vacía
+            editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    // Check if all EditText fields have non-empty text
+                    val isListFull = listEditText.all {
+                        it.text?.isNotEmpty() == true
+                    }
+                    // Change the color if all the fields are filled or not
+                    val color = if(isListFull) Color.WHITE else Color.GRAY
+
+                    btn.setTextColor(color)
+                    btn.isEnabled = isListFull
                 }
-                binding.btnSaveInventory.isEnabled = isListFull
-            }
+            })
         }
+
     }
-
-
-
-    private fun observerViewModel(){
-        observerListProduct()
-    }
-
-    private fun observerListProduct() {
-
-        inventoryViewModel.getProducts()
-        inventoryViewModel.listProducts.observe(viewLifecycleOwner){ lista ->
-
-            val product = lista[2]
-            Glide.with(binding.root.context).load(product.image).into(binding.ivImagenApi)
-            binding.tvTitleProduct.text = product.title
-        }
-    }
-
-
 }
