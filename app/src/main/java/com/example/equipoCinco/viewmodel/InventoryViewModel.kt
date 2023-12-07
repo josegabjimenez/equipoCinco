@@ -103,6 +103,8 @@ class InventoryViewModel @Inject constructor(
         }
     }
 
+
+
     fun loginUser(email: String, pass: String, isLogin: (Boolean) -> Unit) {
 
         if (email.isNotEmpty() && pass.isNotEmpty()) {
@@ -120,13 +122,18 @@ class InventoryViewModel @Inject constructor(
         }
     }
 
-    fun sesion(email: String?, isEnableView: (Boolean) -> Unit) {
-        if (email != null) {
-            isEnableView(true)
-        } else {
-            isEnableView(false)
+    companion object {
+        fun sesion(email: String?, isEnableView: (Boolean) -> Unit) {
+            if (email != null) {
+                isEnableView(true)
+            } else {
+                isEnableView(false)
+            }
         }
     }
+
+
 }
+
 
 

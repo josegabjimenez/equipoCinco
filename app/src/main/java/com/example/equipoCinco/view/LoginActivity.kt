@@ -39,17 +39,24 @@ class LoginActivity : AppCompatActivity() {
         val pass = binding.etPass.text.toString()
         loginViewModel.registerUser(email,pass) { isRegister ->
             if (isRegister) {
-                goToHome(email)
+                goToHome()
             } else {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
 
         }
     }
+    /*
     private fun goToHome(email: String?){
         val intent = Intent (this, MainActivity::class.java).apply {
             putExtra("email",email)
         }
+        startActivity(intent)
+        finish()
+    }
+    */
+    private fun goToHome(){
+        val intent = Intent (this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -58,21 +65,24 @@ class LoginActivity : AppCompatActivity() {
         val pass = binding.etPass.text.toString()
         loginViewModel.loginUser(email,pass){ isLogin ->
             if (isLogin){
-                goToHome(email)
+                goToHome()
             }else {
                 Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
     private fun sesion(){
         val email = sharedPreferences.getString("email",null)
-        loginViewModel.sesion(email){ isEnableView ->
+        InventoryViewModel.sesion(email){ isEnableView ->
             if (isEnableView){
                 binding.clContenedor.visibility = View.INVISIBLE
-                goToHome(email)
+                goToHome()
             }
         }
     }
+
+
     override fun onStart() {
         super.onStart()
         binding.clContenedor.visibility = View.VISIBLE
