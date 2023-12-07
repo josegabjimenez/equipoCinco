@@ -37,6 +37,10 @@ class AddItemFragment : Fragment() {
     }
 
     private fun controladores() {
+        binding.toolbar.toolbarTitle.setText("Agregar producto")
+        binding.toolbar.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
         validarDatos()
         binding.btnSaveInventory.setOnClickListener {
             saveInventory()
@@ -72,13 +76,15 @@ class AddItemFragment : Fragment() {
     private fun validarDatos() {
         val listEditText = listOf(binding.etId, binding.etName, binding.etPrice, binding.etQuantity)
 
-        for (editText in listEditText) {
+        binding.btnSaveInventory.isEnabled = true
+
+        /*for (editText in listEditText) {
             editText.addTextChangedListener {
                 val isListFull = listEditText.all{
                     it.text.isNotEmpty() // si toda la lista no está vacía
                 }
                 binding.btnSaveInventory.isEnabled = isListFull
             }
-        }
+        }*/
     }
 }

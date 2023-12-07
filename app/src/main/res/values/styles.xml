@@ -16,4 +16,22 @@
         <item name="android:indeterminateTint">@color/backgroudColorBtn</item>
         <item name="android:indeterminateTintMode">src_atop</item>
     </style>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/white</item>
+        <item name="cursorColor">@color/white</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="placeholderTextColor">@color/white</item>
+        <item name="boxStrokeColor">@color/selector_text_input_outline</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
+
+    <style name="TextInputEditTextStyle" >
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+
 </resources>
