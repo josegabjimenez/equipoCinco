@@ -3,18 +3,31 @@ import com.example.equipoCinco.data.InventoryDao
 import com.example.equipoCinco.model.Inventory
 import com.example.equipoCinco.model.Product
 import com.example.equipoCinco.webservice.ApiService
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class InventoryRepository  @Inject constructor(
     private val inventoryDao: InventoryDao,
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val db: FirebaseFirestore
 ){
      suspend fun saveInventory(inventory:Inventory){
          withContext(Dispatchers.IO){
-             inventoryDao.saveInventory(inventory)
+             db.collection("inventory").document(inventory.id.toString()).set(
+                 hashMapOf(
+                     "id" to inventory.id,
+                     "name" to inventory.name,
+                     "price" to inventory.price,
+                     "quantity" to inventory.quantity
+                 )
+             )
          }
+
+         /*withContext(Dispatchers.IO){
+             inventoryDao.saveInventory(inventory)
+         }*/
      }
 
     suspend fun getListInventory():MutableList<Inventory>{
