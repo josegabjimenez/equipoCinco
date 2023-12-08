@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.equipoCinco.R
@@ -30,6 +32,14 @@ class ItemDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val toolbar = binding.contentToolbar.toolbar
+        val toolbarTitle: TextView = toolbar.findViewById(R.id.toolbarTitle)
+        toolbarTitle.text = "Detalle del producto"
+
+        val backButton = toolbar.findViewById<ImageView>(R.id.backBtn)
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
         dataInventory()
         controladores()
     }
