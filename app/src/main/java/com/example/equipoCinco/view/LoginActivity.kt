@@ -11,11 +11,11 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.equipoCinco.R
 import com.example.equipoCinco.databinding.ActivityLoginBinding
-import com.example.equipoCinco.viewmodel.InventoryViewModel
+import com.example.equipoCinco.viewmodel.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val loginViewModel: InventoryViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
     private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun sesion(){
         val email = sharedPreferences.getString("email",null)
-        InventoryViewModel.sesion(email){ isEnableView ->
+        loginViewModel.sesion(email){ isEnableView ->
             if (isEnableView){
                 binding.clContenedor.visibility = View.INVISIBLE
                 goToHome()
