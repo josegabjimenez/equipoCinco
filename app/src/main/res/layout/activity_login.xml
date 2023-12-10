@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:src="@drawable/icono_login"
-
             android:paddingTop="120dp"
+            android:paddingBottom="20dp"
             app:layout_constraintBottom_toTopOf="@+id/tilEmail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/tilPass">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                 android:textColorHint="@android:color/darker_gray"
                 android:padding="16dp"
                 android:textSize="18sp"
-                android:drawableEnd="@drawable/ojo_alternancia_1" />
+                android:drawableEnd="@drawable/ojo_alternancia_2" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +111,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:layout_marginTop="50dp"
-            android:textColor="@color/lightGray"
+            android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@+id/btnLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

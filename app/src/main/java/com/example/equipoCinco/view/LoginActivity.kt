@@ -11,7 +11,9 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var tilPassword: TextInputLayout
     private lateinit var etPassword: TextInputEditText
+    private lateinit var tilEmail: TextInputLayout
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var btnLogin: Button
+    private lateinit var btnRegister: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
@@ -38,17 +44,40 @@ class LoginActivity : AppCompatActivity() {
         sesion()
         setup()
         setupPasswordVisibilityToggle()
+        //disabledButton()
 
         tilPassword = findViewById(R.id.tilPass)
         etPassword = findViewById(R.id.etPass)
+        tilEmail = findViewById(R.id.tilEmail)
+        etEmail = findViewById(R.id.etEmail)
+        btnLogin = findViewById(R.id.btnLogin)
+        btnRegister = findViewById(R.id.tvRegister)
+
+        val emailText = etEmail.text.toString()
+        val passwordText = etPassword.text.toString()
+
+        btnLogin.isEnabled = emailText.isNotEmpty() && passwordText.isNotEmpty()
+        btnRegister.isEnabled = emailText.isNotEmpty() && passwordText.isNotEmpty()
+        // Agregar TextWatcher para el campo de email
+        etEmail.addTextChangedListener(createTextWatcher())
+
+        // Agregar TextWatcher para el campo de contraseña
+        etPassword.addTextChangedListener(createTextWatcher())
+
+
+        // Agregar TextWatcher para el campo de email
 
         etPassword.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
 
         // Agregar un TextWatcher al EditText para realizar la validación en tiempo real
         etPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
 
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
 
             override fun afterTextChanged(editable: Editable?) {
                 validatePassword(editable.toString())
@@ -144,12 +173,31 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun sesion(){
         val email = sharedPreferences.getString("email",null)
         loginViewModel.sesion(email){ isEnableView ->
             if (isEnableView){
                 binding.clContenedor.visibility = View.INVISIBLE
                 goToHome()
+            }
+        }
+    }
+
+    private fun createTextWatcher(): TextWatcher {
+        return object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                // Verificar si ambos campos están vacíos para desactivar el botón
+                val emailText = etEmail.text.toString()
+                val passwordText = etPassword.text.toString()
+
+                btnLogin.isEnabled = emailText.isNotEmpty() && passwordText.isNotEmpty()
+                btnRegister.isEnabled = emailText.isNotEmpty() && passwordText.isNotEmpty()
             }
         }
     }
