@@ -9,9 +9,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import com.example.equipoCinco.R
 import com.example.equipoCinco.databinding.ActivityLoginBinding
 import com.example.equipoCinco.viewmodel.LoginViewModel
+import androidx.navigation.fragment.findNavController
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
