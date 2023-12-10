@@ -42,7 +42,6 @@ android {
         dataBinding = true
     }
 }
-
 dependencies {
     val navVersion = "2.3.5"
     implementation("androidx.core:core-ktx:1.9.0")
