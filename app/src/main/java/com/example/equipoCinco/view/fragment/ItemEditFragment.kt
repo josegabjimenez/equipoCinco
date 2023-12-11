@@ -47,6 +47,7 @@ class ItemEditFragment : Fragment() {
         binding.etName.setText(receivedInventory.name)
         binding.etPrice.setText(receivedInventory.price.toString())
         binding.etQuantity.setText(receivedInventory.quantity.toString())
+        binding.ID.text = "Id: ${receivedInventory.id}"
 
     }
 
