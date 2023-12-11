@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
         sharedPreferences = getSharedPreferences("shared", Context.MODE_PRIVATE)
 
-
+        checkSession()
         sesion()
         setup()
         setupPasswordVisibilityToggle()
@@ -93,11 +93,19 @@ class LoginActivity : AppCompatActivity() {
             loginUser()
         }
     }
+
+    private fun saveSession(email: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("email", email)
+        editor.putBoolean("isLoggedIn", true)
+        editor.apply()
+    }
     private fun registerUser(){
         val email = binding.etEmail.text.toString()
         val pass = binding.etPass.text.toString()
         loginViewModel.registerUser(email,pass) { isRegister ->
             if (isRegister) {
+                saveSession(email)
                 goToHome()
             } else {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
@@ -124,6 +132,7 @@ class LoginActivity : AppCompatActivity() {
         val pass = binding.etPass.text.toString()
         loginViewModel.loginUser(email,pass){ isLogin ->
             if (isLogin){
+                saveSession(email)
                 goToHome()
             }else {
                 Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
@@ -185,7 +194,19 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun createTextWatcher(): TextWatcher {
+
+
+    private fun checkSession() {
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        if (isLoggedIn) {
+            // El usuario ya ha iniciado sesión, navega a la actividad principal u otra actividad necesaria.
+            goToHome()
+        } else {
+            // El usuario no ha iniciado sesión, muestra la interfaz de inicio de sesión.
+        }
+    }
+
+            private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
 
