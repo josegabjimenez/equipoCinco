@@ -1,5 +1,8 @@
 package com.example.equipoCinco.view.fragment
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +14,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.equipoCinco.R
 import com.example.equipoCinco.databinding.FragmentHomeInventoryBinding
+import com.example.equipoCinco.view.LoginActivity
+import com.example.equipoCinco.view.MainActivity
 import com.example.equipoCinco.view.adapter.InventoryAdapter
 import com.example.equipoCinco.viewmodel.InventoryViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeInventoryFragment : Fragment() {
     private lateinit var binding: FragmentHomeInventoryBinding
     private val inventoryViewModel: InventoryViewModel by viewModels()
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +38,8 @@ class HomeInventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences = requireActivity().getSharedPreferences("shared", Context.MODE_PRIVATE)
+        loginData()
         controladores()
         observadorViewModel()
 
@@ -39,6 +48,9 @@ class HomeInventoryFragment : Fragment() {
     private fun controladores() {
         binding.fbagregar.setOnClickListener {
             findNavController().navigate(R.id.action_homeInventoryFragment_to_addItemFragment)
+        }
+        binding.homeToolbar.logoutBtn.setOnClickListener {
+            logOut()
         }
 
     }
@@ -69,5 +81,21 @@ class HomeInventoryFragment : Fragment() {
             binding.progress.isVisible = status
         }
     }
+
+    private fun loginData() {
+        val bundle = requireActivity().intent.extras
+        val email = bundle?.getString("email")
+        sharedPreferences.edit().putString("email",email).apply()
+    }
+
+    private fun logOut(){
+        sharedPreferences.edit().clear().apply()
+        FirebaseAuth.getInstance().signOut()
+        (requireActivity() as MainActivity).apply {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+    }
+
 
 }
