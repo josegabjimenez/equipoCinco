@@ -6,6 +6,7 @@ import com.example.equipoCinco.R
 
 import androidx.databinding.DataBindingUtil
 import com.example.equipoCinco.databinding.ActivityMainBinding
+import com.example.equipoCinco.view.fragment.HomeInventoryFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,4 +15,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
 }

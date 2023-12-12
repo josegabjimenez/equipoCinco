@@ -123,7 +123,10 @@ class LoginActivity : AppCompatActivity() {
     }
     */
     private fun goToHome(){
-        val intent = Intent (this, MainActivity::class.java)
+        val email = binding.etEmail.text.toString()
+        val intent = Intent (this, MainActivity::class.java).apply {
+            putExtra("email",email)
+        }
         startActivity(intent)
         finish()
     }
