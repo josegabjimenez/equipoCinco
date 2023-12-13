@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">25dp</item>
     </style>
+
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:colorControlNormal">@color/white</item>
         <item name="titleTextColor">@color/white</item>
     </style>
+
     <style name="RoundedFAB" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">30%</item>
     </style>
+
     <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateTint">@color/backgroudColorBtn</item>
         <item name="android:indeterminateTintMode">src_atop</item>
@@ -28,11 +32,19 @@
         <item name="android:layout_marginEnd">20dp</item>
     </style>
 
-    <style name="TextInputEditTextStyle" >
+    <style name="TextInputEditTextStyle">
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="Widget.Clase8.AppWidget.Container" parent="android:Widget">
+        <item name="android:id">@android:id/background</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
 
+    <style name="Widget.Clase8.AppWidget.InnerView" parent="android:Widget">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
 
 
 </resources>
