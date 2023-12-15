@@ -64,9 +64,17 @@ class InventoryRepository  @Inject constructor(
 
     suspend fun updateRepositoy(inventory: Inventory) {
         withContext(Dispatchers.IO) {
-            inventoryDao.updateInventory(inventory)
+            db.collection("inventory").document(inventory.id.toString()).set(
+                hashMapOf(
+                    "id" to inventory.id,
+                    "name" to inventory.name,
+                    "price" to inventory.price,
+                    "quantity" to inventory.quantity
+                )
+            )
         }
     }
+
 
     suspend fun getProducts(): MutableList<Product> {
         return withContext(Dispatchers.IO) {

@@ -32,6 +32,8 @@ class ItemDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataInventory()
         controladores()
+
+
     }
 
     private fun controladores() {
@@ -65,5 +67,7 @@ class ItemDetailsFragment : Fragment() {
         inventoryViewModel.getListInventory()
         findNavController().popBackStack()
     }
+
+
 
 }

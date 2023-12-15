@@ -42,5 +42,8 @@
             app:destination="@id/homeInventoryFragment"
             app:popUpTo="@+id/homeInventoryFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_itemEditFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
     </fragment>
 </navigation>
