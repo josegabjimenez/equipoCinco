@@ -14,6 +14,8 @@ import com.example.equipoCinco.databinding.FragmentItemDetailsBinding
 import com.example.equipoCinco.model.Inventory
 import com.example.equipoCinco.viewmodel.InventoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.NumberFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class ItemDetailsFragment : Fragment() {
@@ -58,18 +60,31 @@ class ItemDetailsFragment : Fragment() {
         }
     }
 
+    private fun formatPrice(price: Double): String {
+        val numberFormat = NumberFormat.getNumberInstance(Locale("es", "ES"))
+        numberFormat.minimumFractionDigits = 2
+        numberFormat.maximumFractionDigits = 2
+        return numberFormat.format(price)
+    }
+
+
     private fun dataInventory() {
         val receivedBundle = arguments
         receivedInventory = receivedBundle?.getSerializable("clave") as Inventory
         binding.tvItem.text = "${receivedInventory.name}"
-        binding.tvPrice.text = "$ ${receivedInventory.price}"
+
+        val formattedPrice = formatPrice(receivedInventory.price.toDouble())
+        binding.tvPrice.text = "$ ${formattedPrice}"
         binding.tvQuantity.text = "${receivedInventory.quantity}"
-        binding.txtTotal.text = "$ ${
-            inventoryViewModel.totalProducto(
-                receivedInventory.price,
-                receivedInventory.quantity
-            )
-        }"
+
+        val total = inventoryViewModel.totalProducto(
+            receivedInventory.price,
+            receivedInventory.quantity
+        )
+
+        val formattedTotal = formatPrice(total)
+
+        binding.txtTotal.text = "$ ${formattedTotal}"
     }
 
     private fun deleteInventory(){
