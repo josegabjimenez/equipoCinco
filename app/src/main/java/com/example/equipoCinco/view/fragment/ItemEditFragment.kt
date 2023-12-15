@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.text.Editable
+import android.text.TextWatcher
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -33,6 +36,14 @@ class ItemEditFragment : Fragment() {
         dataInventory()
         controladores()
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.etName.addTextChangedListener(textWatcher)
+        binding.etPrice.addTextChangedListener(textWatcher)
+        binding.etQuantity.addTextChangedListener(textWatcher)
+
     }
 
     private fun controladores(){
@@ -47,6 +58,7 @@ class ItemEditFragment : Fragment() {
         binding.etName.setText(receivedInventory.name)
         binding.etPrice.setText(receivedInventory.price.toString())
         binding.etQuantity.setText(receivedInventory.quantity.toString())
+        binding.ID.text = "Id: ${receivedInventory.id}"
 
     }
 
@@ -58,5 +70,25 @@ class ItemEditFragment : Fragment() {
         inventoryViewModel.updateInventory(inventory)
         findNavController().navigate(R.id.action_itemEditFragment_to_homeInventoryFragment)
 
+    }
+
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // No se usa, pero se debe implementar
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Verificar si alguno de los campos está vacío
+            val isNameEmpty = binding.etName.text.toString().isEmpty()
+            val isPriceEmpty = binding.etPrice.text.toString().isEmpty()
+            val isQuantityEmpty = binding.etQuantity.text.toString().isEmpty()
+
+            // Habilitar o deshabilitar el botón según las condiciones
+            binding.btnEdit.isEnabled = !isNameEmpty && !isPriceEmpty && !isQuantityEmpty
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            // No se usa, pero se debe implementar
+        }
     }
 }

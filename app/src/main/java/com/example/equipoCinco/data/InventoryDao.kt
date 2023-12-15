@@ -17,7 +17,7 @@ interface InventoryDao {
 
     @Delete
     suspend fun deleteInventory(inventory: Inventory)
-
     @Update
     suspend fun updateInventory(inventory: Inventory)
+
 }

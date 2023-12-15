@@ -3,7 +3,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#424242</color>
+    <color name="lightGray">#929292</color>
+    <color name="orange">#e7522e</color>
+    <color name="red">#b3251f</color>
     <color name="backgroundColor">#CC000000</color>
     <color name="backgroundColorItem">#e7e0eb</color>
     <color name="backgroudColorBtn">#FF3A06</color>
+    <color name="colorOrange">#e8542c</color> <!-- Cambia #FFA500 por el código de color naranja que prefieras -->
+
+
+
+
 </resources>
