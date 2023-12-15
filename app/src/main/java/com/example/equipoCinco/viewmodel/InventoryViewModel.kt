@@ -96,4 +96,3 @@ class InventoryViewModel @Inject constructor(
         return total.toDouble()
     }
 }
-

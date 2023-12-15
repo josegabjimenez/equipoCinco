@@ -1,6 +1,9 @@
 package com.example.equipoCinco.view.fragment
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -76,15 +79,30 @@ class AddItemFragment : Fragment() {
     private fun validarDatos() {
         val listEditText = listOf(binding.etId, binding.etName, binding.etPrice, binding.etQuantity)
 
-        binding.btnSaveInventory.isEnabled = true
+        val btn = binding.btnSaveInventory
+        btn.isEnabled = false // Initially, disable the button
+        btn.setTextColor(Color.GRAY)
 
-        /*for (editText in listEditText) {
-            editText.addTextChangedListener {
-                val isListFull = listEditText.all{
-                    it.text.isNotEmpty() // si toda la lista no está vacía
+
+        for (editText in listEditText) {
+            editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    // Check if all EditText fields have non-empty text
+                    val isListFull = listEditText.all {
+                        it.text?.isNotEmpty() == true
+                    }
+                    // Change the color if all the fields are filled or not
+                    val color = if(isListFull) Color.WHITE else Color.GRAY
+
+                    btn.setTextColor(color)
+                    btn.isEnabled = isListFull
                 }
-                binding.btnSaveInventory.isEnabled = isListFull
-            }
-        }*/
+            })
+        }
+
     }
 }
