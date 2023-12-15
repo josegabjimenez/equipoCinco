@@ -56,9 +56,18 @@ class InventoryRepository  @Inject constructor(
         }
     }
 
-    suspend fun deleteInventory(inventory: Inventory) {
+    suspend fun deleteInventory(inventory: Inventory){
         withContext(Dispatchers.IO) {
-            inventoryDao.deleteInventory(inventory)
+            try {
+                // Eliminar el documento en Firebase Firestore
+                db.collection("inventory").document(inventory.id.toString()).delete().await()
+
+                // También puedes eliminar el objeto localmente si es necesario
+                // inventoryDao.deleteInventory(inventory)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Manejar el error según sea necesario
+            }
         }
     }
 
