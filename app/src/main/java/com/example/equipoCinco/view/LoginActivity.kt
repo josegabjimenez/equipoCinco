@@ -23,8 +23,9 @@ import com.example.equipoCinco.databinding.ActivityLoginBinding
 import com.example.equipoCinco.viewmodel.LoginViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
@@ -128,10 +129,7 @@ class LoginActivity : AppCompatActivity() {
     }
     */
     private fun goToHome(){
-        val email = binding.etEmail.text.toString()
-        val intent = Intent (this, MainActivity::class.java).apply {
-            putExtra("email",email)
-        }
+        val intent = Intent (this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -220,7 +218,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-            private fun createTextWatcher(): TextWatcher {
+    private fun createTextWatcher(): TextWatcher {
         return object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
 
