@@ -5,6 +5,7 @@ import com.example.equipoCinco.data.InventoryDB
 import com.example.equipoCinco.data.InventoryDao
 import com.example.equipoCinco.utils.Constants.BASE_URL
 import com.example.equipoCinco.webservice.ApiService
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -51,6 +52,12 @@ object Module {
     @Provides
     fun provideFirestoreDB(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAuthDB(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
     }
 
 }
