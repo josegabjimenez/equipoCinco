@@ -103,10 +103,15 @@ class LoginActivity : AppCompatActivity() {
     private fun registerUser(){
         val email = binding.etEmail.text.toString()
         val pass = binding.etPass.text.toString()
+        val isFromWidget = intent.getStringExtra("fromWidget")
         loginViewModel.registerUser(email,pass) { isRegister ->
             if (isRegister) {
                 saveSession(email)
-                goToHome()
+                if(isFromWidget == "true"){
+                    finish()
+                } else {
+                    goToHome()
+                }
             } else {
                 Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
             }
@@ -133,10 +138,16 @@ class LoginActivity : AppCompatActivity() {
     private fun loginUser(){
         val email = binding.etEmail.text.toString()
         val pass = binding.etPass.text.toString()
+        val isFromWidget = intent.getStringExtra("fromWidget")
         loginViewModel.loginUser(email,pass){ isLogin ->
             if (isLogin){
                 saveSession(email)
-                goToHome()
+                if(isFromWidget == "true"){
+                    finish()
+                } else {
+                    goToHome()
+                }
+
             }else {
                 Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
             }

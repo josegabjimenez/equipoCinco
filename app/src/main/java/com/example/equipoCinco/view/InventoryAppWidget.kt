@@ -14,6 +14,9 @@ import com.example.equipoCinco.view.LoginActivity
 import com.example.equipoCinco.view.MainActivity
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.text.NumberFormat
+import java.util.Locale
 
 /**
  * Implementation of App Widget functionality.
@@ -21,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 class InventoryAppWidget : AppWidgetProvider() {
     companion object {
         var saldoVisible: Boolean = false
-        const val UPDATE_SALDO_ACTION = "com.appmovil.loginfirestore.UPDATE_SALDO_ACTION"
+        var totalSum = 0
     }
     override fun onUpdate(
         context: Context,
@@ -44,12 +47,13 @@ class InventoryAppWidget : AppWidgetProvider() {
                 } else {
                     val loginIntent = Intent(context, LoginActivity::class.java)
                     context?.sendBroadcast(loginIntent)
-                    loginIntent.putExtra("fromWidget", true)
+                    loginIntent.putExtra("fromWidget", "true")
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context?.startActivity(loginIntent)
                 }
             }
             "ENTER_TO_INVENTORY_ACTION" -> {
+                calculateTotalEarnings()
                 if (isUserLoggedIn()) {
                     val homeIntent = Intent(context, MainActivity::class.java)
                     context?.sendBroadcast(homeIntent)
@@ -62,53 +66,54 @@ class InventoryAppWidget : AppWidgetProvider() {
                     context?.startActivity(loginIntent)
                 }
             }
-            "LOGIN_SUCCESSFUL" -> {
-                updateTextWidget(context!!, "$ 2000")
-            }
-            "LOGOFF_SUCCESSFUL" -> {
-                userLogoff(context!!)
-            }
         }
     }
 
     override fun onEnabled(context: Context) {
         // Enter relevant functionality for when the first widget is created
+        calculateTotalEarnings()
     }
 
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
+        calculateTotalEarnings()
+    }
+
+    private fun calculateTotalEarnings() {
+        // Reset accumulated value
+        totalSum = 0
+
+        // Fetch data from Firestore
+        val db = FirebaseFirestore.getInstance()
+        db.collection("inventory").get()
+            .addOnSuccessListener { querySnapshot ->
+
+                for (document in querySnapshot.documents) {
+                    val price = document.getLong("price") ?: 0
+                    val quantity = document.getLong("quantity") ?: 0
+
+                    val productTotal = price.toInt() * quantity.toInt()
+                    totalSum += productTotal
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                // Handle failures
+                println("Error: $exception")
+            }
     }
 
     private fun isUserLoggedIn(): Boolean {
-        // Verificar si el usuario está autenticado en Firebase
+        // Verify if the user is authenticated in Firebase
         val firebaseAuth = FirebaseAuth.getInstance()
         return firebaseAuth.currentUser != null
     }
 
-    private fun userLogoff(context: Context) {
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val thisAppWidget = ComponentName(context.packageName, javaClass.name)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget)
-
-        val views = RemoteViews(context.packageName, R.layout.inventory_app_widget)
-        views.setImageViewResource(R.id.ivShow_inventory, R.drawable.ojo_alternancia_1)
-        views.setTextViewText(R.id.tvEarnings, "$ * * * *")
-
-        appWidgetManager.updateAppWidget(appWidgetIds, views)
-    }
-
-    private fun updateTextWidget(context: Context, newText: String?) {
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val thisAppWidget = ComponentName(context.packageName, javaClass.name)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget)
-
-        val views = RemoteViews(context.packageName, R.layout.inventory_app_widget)
-        views.setImageViewResource(R.id.ivShow_inventory, R.drawable.ojo_alternancia_2)
-        views.setTextViewText(R.id.tvEarnings, newText)
-
-        saldoVisible = true
-
-        appWidgetManager.updateAppWidget(appWidgetIds, views)
+    private fun formatPrice(price: Double): String {
+        val numberFormat = NumberFormat.getNumberInstance(Locale("es", "ES"))
+        numberFormat.minimumFractionDigits = 2
+        numberFormat.maximumFractionDigits = 2
+        return numberFormat.format(price)
     }
 
     private fun updateSaldoWidget(context: Context) {
@@ -118,16 +123,19 @@ class InventoryAppWidget : AppWidgetProvider() {
         val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget)
         val views = RemoteViews(context.packageName, R.layout.inventory_app_widget)
         if (saldoVisible){
-            views.setImageViewResource(R.id.ivShow_inventory, R.drawable.ojo_alternancia_2)
+            views.setImageViewResource(R.id.ivShow_inventory, R.drawable.ojo_alternancia_1)
             views.setTextViewText(R.id.tvEarnings, "$ * * * *")
             saldoVisible = false
         }else{
-            views.setImageViewResource(R.id.ivShow_inventory, R.drawable.ojo_alternancia_1)
-            views.setTextViewText(R.id.tvEarnings, "$ 2000")
+
+            val formattedTotalSum = formatPrice(totalSum.toDouble())
+
+            views.setImageViewResource(R.id.ivShow_inventory, R.drawable.ojo_alternancia_2)
+            views.setTextViewText(R.id.tvEarnings, "$ $formattedTotalSum")
             saldoVisible = true
         }
 
-        // Actualizar todos los widgets
+        // Update widget
         appWidgetManager.updateAppWidget(appWidgetIds, views)
     }
     private fun pendingIntent(
