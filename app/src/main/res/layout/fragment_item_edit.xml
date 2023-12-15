@@ -90,7 +90,8 @@
             app:titleMarginStart="10dp"
             app:titleTextAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             app:titleTextColor="#FFFFFF"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
+            app:navigationIcon="@drawable/ic_back"
+            app:iconSize="36dp"/>
 
 
 
