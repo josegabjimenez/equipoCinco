@@ -6,4 +6,9 @@
     <color name="backgroundColor">#CC000000</color>
     <color name="backgroundColorItem">#e7e0eb</color>
     <color name="backgroudColorBtn">#FF3A06</color>
+    <color name="colorOrange">#e8542c</color> <!-- Cambia #FFA500 por el código de color naranja que prefieras -->
+
+
+
+
 </resources>

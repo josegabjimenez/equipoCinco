@@ -33,6 +33,10 @@ class ItemEditFragment : Fragment() {
         dataInventory()
         controladores()
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
     }
 
     private fun controladores(){
