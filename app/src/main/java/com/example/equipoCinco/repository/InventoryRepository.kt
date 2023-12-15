@@ -1,4 +1,5 @@
 package com.example.equipoCinco.repository
+import com.appmovil.loginfirestore.view.widget.InventoryAppWidget
 import com.example.equipoCinco.data.InventoryDao
 import com.example.equipoCinco.model.Inventory
 import com.example.equipoCinco.model.Product
@@ -16,6 +17,28 @@ class InventoryRepository  @Inject constructor(
     private val apiService: ApiService,
     private val db: FirebaseFirestore,
 ) {
+
+    private fun calculateTotalEarnings() {
+        // Reset accumulated value
+        InventoryAppWidget.totalSum = 0
+
+        db.collection("inventory").get()
+            .addOnSuccessListener { querySnapshot ->
+
+                for (document in querySnapshot.documents) {
+                    val price = document.getLong("price") ?: 0
+                    val quantity = document.getLong("quantity") ?: 0
+
+                    val productTotal = price.toInt() * quantity.toInt()
+                    InventoryAppWidget.totalSum += productTotal
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                // Handle failures
+                println("Error: $exception")
+            }
+    }
     suspend fun saveInventory(inventory: Inventory) {
         withContext(Dispatchers.IO) {
             db.collection("inventory").document(inventory.id.toString()).set(
@@ -26,6 +49,7 @@ class InventoryRepository  @Inject constructor(
                     "quantity" to inventory.quantity
                 )
             )
+            calculateTotalEarnings()
         }
 
         /*withContext(Dispatchers.IO){
@@ -58,16 +82,11 @@ class InventoryRepository  @Inject constructor(
 
     suspend fun deleteInventory(inventory: Inventory){
         withContext(Dispatchers.IO) {
-            try {
                 // Eliminar el documento en Firebase Firestore
-                db.collection("inventory").document(inventory.id.toString()).delete().await()
-
+                db.collection("inventory").document(inventory.id.toString()).delete()
+                calculateTotalEarnings()
                 // También puedes eliminar el objeto localmente si es necesario
                 // inventoryDao.deleteInventory(inventory)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // Manejar el error según sea necesario
-            }
         }
     }
 
@@ -81,6 +100,7 @@ class InventoryRepository  @Inject constructor(
                     "quantity" to inventory.quantity
                 )
             )
+            calculateTotalEarnings()
         }
     }
 

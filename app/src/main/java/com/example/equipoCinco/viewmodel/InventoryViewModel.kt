@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appmovil.loginfirestore.view.widget.InventoryAppWidget
 import com.example.equipoCinco.model.Inventory
 import com.example.equipoCinco.model.Product
 import com.example.equipoCinco.repository.InventoryRepository
@@ -34,6 +35,7 @@ class InventoryViewModel @Inject constructor(
             try {
                 inventoryRepository.saveInventory(inventory)
                 _progresState.value = false
+
             } catch (e: Exception) {
                 _progresState.value = false
             }
